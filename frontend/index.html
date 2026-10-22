@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="sr-Latn">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <!-- Trivio provides its own light/dark themes; avoid Dark Reader double-inversion. -->
+    <meta name="darkreader-lock" />
+    <meta name="theme-color" content="#f8f7f4" />
+    <script>
+      (() => {
+        let preference = 'system';
+        try { preference = localStorage.getItem('trivio-theme') || 'system'; } catch { /* Storage can be disabled. */ }
+        const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const dark = preference === 'dark' || (preference !== 'light' && systemDark);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.querySelector('meta[name="theme-color"]').content = dark ? '#111d19' : '#f8f7f4';
+      })();
+    </script>
+    <meta name="description" content="Trivio — pronađi automobil za svoje sledeće poglavlje. Pregledaj ponudu i svoje porudžbine na jednom mestu." />
+    <title>Trivio — Tvoj sledeći automobil</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

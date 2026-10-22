@@ -1,0 +1,98 @@
+{
+  "info": {
+    "name": "Trivio Starter API",
+    "description": "Initial demonstration of vehicle reservation and simulated payment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "1 - Get vehicles",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/vehicles",
+        "header": []
+      }
+    },
+    {
+      "name": "2 - Create order for vehicle 1",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/orders",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"customerName\": \"Demo Kupac\", \"customerEmail\": \"demo@example.com\", \"vehicleId\": 1}"
+        }
+      }
+    },
+    {
+      "name": "3 - Get order 1",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/orders/1",
+        "header": []
+      }
+    },
+    {
+      "name": "4 - Declined payment",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/payments",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"orderId\": 1, \"approved\": false}"
+        }
+      }
+    },
+    {
+      "name": "5 - Successful payment",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/payments",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"orderId\": 1, \"approved\": true}"
+        }
+      }
+    },
+    {
+      "name": "6 - Check vehicle sold",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/vehicles/1",
+        "header": []
+      }
+    },
+    {
+      "name": "7 - Check payment attempts",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/payments/order/1",
+        "header": []
+      }
+    }
+  ]
+}

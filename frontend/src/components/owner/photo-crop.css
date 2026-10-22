@@ -1,0 +1,48 @@
+/* Photo cropping is client-only; nothing is uploaded until the existing gallery confirmation. */
+.photo-crop-dialog {
+  width: min(760px, calc(100vw - 26px));
+  padding: clamp(18px, 3vw, 29px);
+  max-height: calc(100dvh - 30px);
+  box-sizing: border-box;
+}
+.photo-crop-heading { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.photo-crop-heading h2 { margin-bottom: 5px; font-size: clamp(21px, 3vw, 28px); }
+.photo-crop-heading-icon { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; background: var(--soft-accent); color: var(--green); }
+.photo-crop-dialog .photo-crop-help { color: var(--muted); margin: 7px 0 14px; font-size: 11px; line-height: 1.7; }
+.photo-crop-stage {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 170px; padding: 10px; border-radius: 10px;
+  border: 1px solid var(--line); background: #101a14;
+}
+.photo-crop-image-box { position: relative; display: inline-block; max-width: 100%; line-height: 0; overflow: hidden; user-select: none; touch-action: none; }
+.photo-crop-image-box > img { display: block; max-width: 100%; max-height: min(46vh, 440px); width: auto; height: auto; object-fit: contain; pointer-events: none; user-select: none; }
+.photo-crop-selection { position: absolute; z-index: 1; box-sizing: border-box; border: 2px solid #e1f4d9; box-shadow: 0 0 0 9999px #08120cb0, 0 0 0 1px #15291bc0; touch-action: none; }
+.photo-crop-move { width: 100%; height: 100%; cursor: move; position: relative; outline-offset: -5px; touch-action: none; }
+.photo-crop-move:focus-visible, .photo-crop-resize:focus-visible { outline: 3px solid #a9e58c; }
+.photo-crop-grid {
+  pointer-events: none; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent calc(33.333% - .5px), #f0ffe67c calc(33.333% - .5px), #f0ffe67c calc(33.333% + .5px), transparent calc(33.333% + .5px), transparent calc(66.666% - .5px), #f0ffe67c calc(66.666% - .5px), #f0ffe67c calc(66.666% + .5px), transparent calc(66.666% + .5px)), linear-gradient(0deg, transparent calc(33.333% - .5px), #f0ffe67c calc(33.333% - .5px), #f0ffe67c calc(33.333% + .5px), transparent calc(33.333% + .5px), transparent calc(66.666% - .5px), #f0ffe67c calc(66.666% - .5px), #f0ffe67c calc(66.666% + .5px), transparent calc(66.666% + .5px));
+}
+.photo-crop-resize {
+  position: absolute; bottom: -2px; right: -2px; z-index: 2;
+  width: 23px; height: 23px; padding: 0; border-radius: 6px 0 0 0;
+  border: 2px solid #e1f4d9; background: #274e36; cursor: nwse-resize; touch-action: none;
+}
+.photo-crop-resize::after { content: ''; position: absolute; inset: 6px 4px 4px 6px; border-right: 2px solid white; border-bottom: 2px solid white; }
+.photo-crop-controls { display: grid; grid-template-columns: minmax(150px, 1fr) minmax(180px, 1.2fr) auto; gap: 14px; align-items: end; margin: 16px 0 22px; }
+.photo-crop-controls label { display: flex; flex-direction: column; gap: 8px; font-size: 11px; font-weight: 600; color: var(--ink); }
+.photo-crop-controls select { padding: 8px; min-height: 38px; border-radius: 7px; width: 100%; color: var(--ink); background: var(--field); border: 1px solid var(--field-border); }
+.photo-crop-controls input[type='range'] { width: 100%; margin: 10px 0; accent-color: var(--green); }
+.photo-crop-controls .button { white-space: nowrap; min-height: 38px; padding: 8px 12px; }
+.photo-crop-actions { display: flex; justify-content: flex-end; align-items: center; flex-wrap: wrap; gap: 8px; }
+.photo-crop-actions .button { min-height: 41px; padding: 10px 14px; font-size: 11px; }
+:root[data-theme='dark'] .photo-crop-stage { background: #09140e; border-color: var(--line); }
+:root[data-theme='dark'] .photo-crop-heading-icon { background: var(--soft-accent); color: var(--green); }
+@media (max-width: 650px) {
+  .photo-crop-stage { padding: 6px; min-height: 120px; }
+  .photo-crop-image-box > img { max-height: 38vh; }
+  .photo-crop-controls { grid-template-columns: 1fr 1fr; gap: 11px; }
+  .photo-crop-controls .button { grid-column: 1 / -1; }
+  .photo-crop-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .photo-crop-actions .button:last-child { grid-column: 1 / -1; }
+}

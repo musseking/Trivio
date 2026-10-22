@@ -1,0 +1,29 @@
+### List seeded vehicles
+GET http://localhost:8080/api/vehicles
+
+### Create an order for the first vehicle (change ID if necessary)
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{"customerName":"Vasa","customerEmail":"demo@example.com","vehicleId":1}
+
+### Simulate a declined payment (order stays PENDING)
+POST http://localhost:8080/api/payments
+Content-Type: application/json
+
+{"orderId":1,"approved":false}
+
+### Simulate successful payment (car becomes SOLD)
+POST http://localhost:8080/api/payments
+Content-Type: application/json
+
+{"orderId":1,"approved":true}
+
+### Check vehicle status
+GET http://localhost:8080/api/vehicles/1
+
+### Check order status
+GET http://localhost:8080/api/orders/1
+
+### Check payment attempts for order
+GET http://localhost:8080/api/payments/order/1

@@ -1,0 +1,55 @@
+# ==========================================
+# Trivio — Git Ignore Configuration
+# ==========================================
+
+# Java / Maven
+**/target/
+*.class
+*.iml
+.idea/
+.settings/
+.classpath
+.project
+
+# Node.js / React / Vite
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.npm/
+.vite/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Local vehicle media storage
+/data/vehicle-media/
+/vehicle-service/data/vehicle-media/
+
+# Database backups and dumps
+*.sql.bak
+*.sql.gz
+*.dump
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE / Editor
+.vscode/

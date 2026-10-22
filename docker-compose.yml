@@ -1,0 +1,169 @@
+
+services:
+  discovery-server:
+    build: { context: ., dockerfile: Dockerfile, args: { SERVICE: discovery-server } }
+    ports: ["${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_DISCOVERY_HOST_PORT:?Missing TRIVIO_DISCOVERY_HOST_PORT}:8761"]
+    restart: on-failure
+
+  config-server:
+    build: { context: ., dockerfile: Dockerfile, args: { SERVICE: config-server } }
+    ports: ["${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_CONFIG_HOST_PORT:?Missing TRIVIO_CONFIG_HOST_PORT}:8888"]
+    environment:
+      TRIVIO_CONFIG_DIR: /config
+    volumes:
+      - ./config-repo:/config:ro
+    restart: on-failure
+
+  vehicle-db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: vehicle_db
+      MYSQL_USER: trivio
+      MYSQL_PASSWORD: ${TRIVIO_DB_PASSWORD:?Missing TRIVIO_DB_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${TRIVIO_MYSQL_ROOT_PASSWORD:?Missing TRIVIO_MYSQL_ROOT_PASSWORD in .env}
+    volumes:
+      - vehicle-db-data:/var/lib/mysql
+      - ./docs/db/migrations/vehicle/V001__baseline_schema.sql:/docker-entrypoint-initdb.d/001_baseline.sql:ro
+      - ./docs/db/migrations/vehicle/V002__vehicle_management_and_photos.sql:/docker-entrypoint-initdb.d/002_vehicle_management_and_photos.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$${MYSQL_ROOT_PASSWORD}\" mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      retries: 20
+      start_period: 25s
+
+  order-db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: order_db
+      MYSQL_USER: trivio
+      MYSQL_PASSWORD: ${TRIVIO_DB_PASSWORD:?Missing TRIVIO_DB_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${TRIVIO_MYSQL_ROOT_PASSWORD:?Missing TRIVIO_MYSQL_ROOT_PASSWORD in .env}
+    volumes:
+      - order-db-data:/var/lib/mysql
+      - ./docs/db/migrations/order/V001__baseline_schema.sql:/docker-entrypoint-initdb.d/001_baseline.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$${MYSQL_ROOT_PASSWORD}\" mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      retries: 20
+      start_period: 25s
+
+  payment-db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: payment_db
+      MYSQL_USER: trivio
+      MYSQL_PASSWORD: ${TRIVIO_DB_PASSWORD:?Missing TRIVIO_DB_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${TRIVIO_MYSQL_ROOT_PASSWORD:?Missing TRIVIO_MYSQL_ROOT_PASSWORD in .env}
+    volumes:
+      - payment-db-data:/var/lib/mysql
+      - ./docs/db/migrations/payment/V001__baseline_schema.sql:/docker-entrypoint-initdb.d/001_baseline.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$${MYSQL_ROOT_PASSWORD}\" mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      retries: 20
+      start_period: 25s
+
+  users-db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: users_db
+      MYSQL_USER: trivio
+      MYSQL_PASSWORD: ${TRIVIO_DB_PASSWORD:?Missing TRIVIO_DB_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${TRIVIO_MYSQL_ROOT_PASSWORD:?Missing TRIVIO_MYSQL_ROOT_PASSWORD in .env}
+    volumes:
+      - users-db-data:/var/lib/mysql
+      - ./docs/db/migrations/auth/V001__baseline_schema.sql:/docker-entrypoint-initdb.d/001_baseline.sql:ro
+      - ./docs/db/migrations/auth/V002__single_owner_bootstrap.sql:/docker-entrypoint-initdb.d/002_single_owner_bootstrap.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$${MYSQL_ROOT_PASSWORD}\" mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      retries: 20
+      start_period: 25s
+
+  vehicle-service:
+    build: { context: ., dockerfile: Dockerfile, args: { SERVICE: vehicle-service } }
+    ports: ["${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_VEHICLE_HOST_PORT:?Missing TRIVIO_VEHICLE_HOST_PORT}:8081"]
+    environment:
+      TRIVIO_MEDIA_DIR: /var/lib/trivio/media
+      TRIVIO_AUTH_URL: http://auth-service:8084
+      TRIVIO_INTERNAL_API_KEY: ${TRIVIO_INTERNAL_API_KEY:?Missing TRIVIO_INTERNAL_API_KEY in .env}
+      TRIVIO_CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_PROFILES_ACTIVE: mysql
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka
+      TRIVIO_DB_PASSWORD: ${TRIVIO_DB_PASSWORD:?Missing TRIVIO_DB_PASSWORD in .env}
+    volumes:
+      - vehicle-media:/var/lib/trivio/media
+    depends_on:
+      vehicle-db: { condition: service_healthy }
+      config-server: { condition: service_started }
+      discovery-server: { condition: service_started }
+    restart: on-failure
+
+  order-service:
+    build: { context: ., dockerfile: Dockerfile, args: { SERVICE: order-service } }
+    ports: ["${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_ORDER_HOST_PORT:?Missing TRIVIO_ORDER_HOST_PORT}:8082"]
+    environment:
+      TRIVIO_AUTH_URL: http://auth-service:8084
+      TRIVIO_INTERNAL_API_KEY: ${TRIVIO_INTERNAL_API_KEY:?Missing TRIVIO_INTERNAL_API_KEY in .env}
+      TRIVIO_CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_PROFILES_ACTIVE: mysql
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka
+      TRIVIO_DB_PASSWORD: ${TRIVIO_DB_PASSWORD:?Missing TRIVIO_DB_PASSWORD in .env}
+    depends_on:
+      order-db: { condition: service_healthy }
+      config-server: { condition: service_started }
+      discovery-server: { condition: service_started }
+    restart: on-failure
+
+  payment-service:
+    build: { context: ., dockerfile: Dockerfile, args: { SERVICE: payment-service } }
+    ports: ["${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_PAYMENT_HOST_PORT:?Missing TRIVIO_PAYMENT_HOST_PORT}:8083"]
+    environment:
+      TRIVIO_AUTH_URL: http://auth-service:8084
+      TRIVIO_INTERNAL_API_KEY: ${TRIVIO_INTERNAL_API_KEY:?Missing TRIVIO_INTERNAL_API_KEY in .env}
+      TRIVIO_CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_PROFILES_ACTIVE: mysql
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka
+      TRIVIO_DB_PASSWORD: ${TRIVIO_DB_PASSWORD:?Missing TRIVIO_DB_PASSWORD in .env}
+    depends_on:
+      payment-db: { condition: service_healthy }
+      config-server: { condition: service_started }
+      discovery-server: { condition: service_started }
+    restart: on-failure
+
+  auth-service:
+    build: { context: ., dockerfile: Dockerfile, args: { SERVICE: auth-service } }
+    ports: ["${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_AUTH_HOST_PORT:?Missing TRIVIO_AUTH_HOST_PORT}:8084"]
+    environment:
+      TRIVIO_CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_PROFILES_ACTIVE: mysql
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka
+      TRIVIO_DB_PASSWORD: ${TRIVIO_DB_PASSWORD:?Missing TRIVIO_DB_PASSWORD in .env}
+      TRIVIO_JWT_SECRET_BASE64: ${TRIVIO_JWT_SECRET_BASE64:?Missing TRIVIO_JWT_SECRET_BASE64 in .env}
+      TRIVIO_OWNER_SETUP_KEY: ${TRIVIO_OWNER_SETUP_KEY:?Missing TRIVIO_OWNER_SETUP_KEY in .env}
+    depends_on:
+      users-db: { condition: service_healthy }
+      config-server: { condition: service_started }
+      discovery-server: { condition: service_started }
+    restart: on-failure
+
+  api-gateway:
+    build: { context: ., dockerfile: Dockerfile, args: { SERVICE: api-gateway } }
+    ports: ["${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_GATEWAY_HOST_PORT:?Missing TRIVIO_GATEWAY_HOST_PORT}:8080"]
+    environment:
+      TRIVIO_CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka
+    depends_on:
+      - config-server
+      - discovery-server
+      - vehicle-service
+      - order-service
+      - payment-service
+    restart: on-failure
+
+volumes:
+  vehicle-db-data:
+  order-db-data:
+  payment-db-data:
+  users-db-data:
+  vehicle-media:

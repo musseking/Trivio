@@ -1,0 +1,34 @@
+
+# Trivio — Optional Docker Compose configuration for MySQL replication sources.
+#
+# Use this file together with the main docker-compose.yml file,
+# not as a replacement for it.
+#
+# The Windows MySQL server continues to use port 3306.
+# The Docker MySQL source instances are accessible from the Windows host
+# only through 127.0.0.1 on ports 3307, 3308, 3309, and 3310.
+#
+# This configuration preserves existing Docker volumes and data.
+# It assigns unique server IDs and exposes the MySQL source ports,
+# but does not configure or start replication on its own.
+
+services:
+  vehicle-db:
+    command: ["--server-id=101"]
+    ports:
+      - "${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_VEHICLE_REPLICATION_PORT:?Missing TRIVIO_VEHICLE_REPLICATION_PORT}:3306"
+
+  order-db:
+    command: ["--server-id=102"]
+    ports:
+      - "${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_ORDER_REPLICATION_PORT:?Missing TRIVIO_ORDER_REPLICATION_PORT}:3306"
+
+  payment-db:
+    command: ["--server-id=103"]
+    ports:
+      - "${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_PAYMENT_REPLICATION_PORT:?Missing TRIVIO_PAYMENT_REPLICATION_PORT}:3306"
+
+  users-db:
+    command: ["--server-id=104"]
+    ports:
+      - "${TRIVIO_BIND_ADDRESS:?Missing TRIVIO_BIND_ADDRESS}:${TRIVIO_USERS_REPLICATION_PORT:?Missing TRIVIO_USERS_REPLICATION_PORT}:3306"

@@ -1,0 +1,11 @@
+.git
+**/target
+.idea
+.vscode
+*.log
+.env
+.env.*
+**/node_modules
+frontend/dist
+data/vehicle-media
+vehicle-service/data/vehicle-media
