@@ -1,29 +1,66 @@
-### List seeded vehicles
-GET http://localhost:8080/api/vehicles
+# Trivio API examples
+#
+# Configure the variables for YOUR installation.
+# Authenticate before calling protected endpoints.
+# Never commit real passwords, JWT tokens or private values.
 
-### Create an order for the first vehicle (change ID if necessary)
-POST http://localhost:8080/api/orders
+@baseUrl = http://YOUR_GATEWAY_HOST:YOUR_GATEWAY_PORT
+@accessToken = REPLACE_WITH_TOKEN_FROM_LOGIN
+@vehicleId = REPLACE_WITH_AVAILABLE_VEHICLE_ID
+@orderId = REPLACE_WITH_CREATED_ORDER_ID
+
+### Check first-time OWNER setup status
+GET {{baseUrl}}/api/auth/setup/status
+
+### Login with an existing account
+POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
-{"customerName":"Vasa","customerEmail":"demo@example.com","vehicleId":1}
+{"email":"REPLACE_WITH_EMAIL","password":"REPLACE_WITH_PASSWORD"}
 
-### Simulate a declined payment (order stays PENDING)
-POST http://localhost:8080/api/payments
+### Get vehicles (public)
+GET {{baseUrl}}/api/vehicles
+
+### Get vehicle details (public)
+GET {{baseUrl}}/api/vehicles/{{vehicleId}}
+
+### Verify logged-in user
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{accessToken}}
+
+### Create an order for an available vehicle
+# Requires a valid JWT.
+# Replace vehicleId with an actual available vehicle ID.
+# Copy the returned order ID into the orderId variable.
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
-{"orderId":1,"approved":false}
+{"vehicleId": {{vehicleId}}}
 
-### Simulate successful payment (car becomes SOLD)
-POST http://localhost:8080/api/payments
+### View my orders
+GET {{baseUrl}}/api/orders/mine
+Authorization: Bearer {{accessToken}}
+
+### Simulate a declined payment
+POST {{baseUrl}}/api/payments
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
-{"orderId":1,"approved":true}
+{"orderId": {{orderId}}, "approved": false}
 
-### Check vehicle status
-GET http://localhost:8080/api/vehicles/1
+### Simulate a successful payment
+# Only run when you intend to confirm the purchase.
+POST {{baseUrl}}/api/payments
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
 
-### Check order status
-GET http://localhost:8080/api/orders/1
+{"orderId": {{orderId}}, "approved": true}
 
-### Check payment attempts for order
-GET http://localhost:8080/api/payments/order/1
+### View order details
+GET {{baseUrl}}/api/orders/{{orderId}}
+Authorization: Bearer {{accessToken}}
+
+### View payment attempts for an order
+GET {{baseUrl}}/api/payments/order/{{orderId}}
+Authorization: Bearer {{accessToken}}

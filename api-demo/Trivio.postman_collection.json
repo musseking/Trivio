@@ -1,98 +1,267 @@
 {
-  "info": {
-    "name": "Trivio Starter API",
-    "description": "Initial demonstration of vehicle reservation and simulated payment.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8080"
-    }
-  ],
-  "item": [
-    {
-      "name": "1 - Get vehicles",
-      "request": {
-        "method": "GET",
-        "url": "{{baseUrl}}/api/vehicles",
-        "header": []
-      }
-    },
-    {
-      "name": "2 - Create order for vehicle 1",
-      "request": {
-        "method": "POST",
-        "url": "{{baseUrl}}/api/orders",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\"customerName\": \"Demo Kupac\", \"customerEmail\": \"demo@example.com\", \"vehicleId\": 1}"
-        }
-      }
-    },
-    {
-      "name": "3 - Get order 1",
-      "request": {
-        "method": "GET",
-        "url": "{{baseUrl}}/api/orders/1",
-        "header": []
-      }
-    },
-    {
-      "name": "4 - Declined payment",
-      "request": {
-        "method": "POST",
-        "url": "{{baseUrl}}/api/payments",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\"orderId\": 1, \"approved\": false}"
-        }
-      }
-    },
-    {
-      "name": "5 - Successful payment",
-      "request": {
-        "method": "POST",
-        "url": "{{baseUrl}}/api/payments",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\"orderId\": 1, \"approved\": true}"
-        }
-      }
-    },
-    {
-      "name": "6 - Check vehicle sold",
-      "request": {
-        "method": "GET",
-        "url": "{{baseUrl}}/api/vehicles/1",
-        "header": []
-      }
-    },
-    {
-      "name": "7 - Check payment attempts",
-      "request": {
-        "method": "GET",
-        "url": "{{baseUrl}}/api/payments/order/1",
-        "header": []
-      }
-    }
-  ]
+    "info":  {
+                 "name":  "Trivio API",
+                 "description":  "Manual API examples. Configure private variables locally. Never export real tokens or passwords into Git.",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+             },
+    "variable":  [
+                     {
+                         "key":  "baseUrl",
+                         "value":  "http://YOUR_GATEWAY_HOST:YOUR_GATEWAY_PORT"
+                     },
+                     {
+                         "key":  "accessToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "loginEmail",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "loginPassword",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "vehicleId",
+                         "value":  "REPLACE_WITH_AVAILABLE_VEHICLE_ID"
+                     },
+                     {
+                         "key":  "orderId",
+                         "value":  "REPLACE_WITH_CREATED_ORDER_ID"
+                     }
+                 ],
+    "item":  [
+                 {
+                     "name":  "Check OWNER setup",
+                     "request":  {
+                                     "method":  "GET",
+                                     "header":  [
+
+                                                ],
+                                     "url":  "{{baseUrl}}/api/auth/setup/status"
+                                 }
+                 },
+                 {
+                     "name":  "Login",
+                     "request":  {
+                                     "method":  "POST",
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json",
+                                                        "type":  "text"
+                                                    }
+                                                ],
+                                     "url":  "{{baseUrl}}/api/auth/login",
+                                     "body":  {
+                                                  "mode":  "raw",
+                                                  "raw":  "{\"email\":\"{{loginEmail}}\",\"password\":\"{{loginPassword}}\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              }
+                                              }
+                                 }
+                 },
+                 {
+                     "name":  "List vehicles",
+                     "request":  {
+                                     "method":  "GET",
+                                     "header":  [
+
+                                                ],
+                                     "url":  "{{baseUrl}}/api/vehicles"
+                                 }
+                 },
+                 {
+                     "name":  "Vehicle details",
+                     "request":  {
+                                     "method":  "GET",
+                                     "header":  [
+
+                                                ],
+                                     "url":  "{{baseUrl}}/api/vehicles/{{vehicleId}}"
+                                 }
+                 },
+                 {
+                     "name":  "Current user",
+                     "request":  {
+                                     "method":  "GET",
+                                     "header":  [
+
+                                                ],
+                                     "url":  "{{baseUrl}}/api/auth/me",
+                                     "auth":  {
+                                                  "type":  "bearer",
+                                                  "bearer":  [
+                                                                 {
+                                                                     "key":  "token",
+                                                                     "value":  "{{accessToken}}",
+                                                                     "type":  "string"
+                                                                 }
+                                                             ]
+                                              }
+                                 }
+                 },
+                 {
+                     "name":  "Create order",
+                     "request":  {
+                                     "method":  "POST",
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json",
+                                                        "type":  "text"
+                                                    }
+                                                ],
+                                     "url":  "{{baseUrl}}/api/orders",
+                                     "auth":  {
+                                                  "type":  "bearer",
+                                                  "bearer":  [
+                                                                 {
+                                                                     "key":  "token",
+                                                                     "value":  "{{accessToken}}",
+                                                                     "type":  "string"
+                                                                 }
+                                                             ]
+                                              },
+                                     "body":  {
+                                                  "mode":  "raw",
+                                                  "raw":  "{\"vehicleId\":{{vehicleId}}}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              }
+                                              }
+                                 }
+                 },
+                 {
+                     "name":  "My orders",
+                     "request":  {
+                                     "method":  "GET",
+                                     "header":  [
+
+                                                ],
+                                     "url":  "{{baseUrl}}/api/orders/mine",
+                                     "auth":  {
+                                                  "type":  "bearer",
+                                                  "bearer":  [
+                                                                 {
+                                                                     "key":  "token",
+                                                                     "value":  "{{accessToken}}",
+                                                                     "type":  "string"
+                                                                 }
+                                                             ]
+                                              }
+                                 }
+                 },
+                 {
+                     "name":  "Declined payment",
+                     "request":  {
+                                     "method":  "POST",
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json",
+                                                        "type":  "text"
+                                                    }
+                                                ],
+                                     "url":  "{{baseUrl}}/api/payments",
+                                     "auth":  {
+                                                  "type":  "bearer",
+                                                  "bearer":  [
+                                                                 {
+                                                                     "key":  "token",
+                                                                     "value":  "{{accessToken}}",
+                                                                     "type":  "string"
+                                                                 }
+                                                             ]
+                                              },
+                                     "body":  {
+                                                  "mode":  "raw",
+                                                  "raw":  "{\"orderId\":{{orderId}},\"approved\":false}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              }
+                                              }
+                                 }
+                 },
+                 {
+                     "name":  "Successful payment",
+                     "request":  {
+                                     "method":  "POST",
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json",
+                                                        "type":  "text"
+                                                    }
+                                                ],
+                                     "url":  "{{baseUrl}}/api/payments",
+                                     "auth":  {
+                                                  "type":  "bearer",
+                                                  "bearer":  [
+                                                                 {
+                                                                     "key":  "token",
+                                                                     "value":  "{{accessToken}}",
+                                                                     "type":  "string"
+                                                                 }
+                                                             ]
+                                              },
+                                     "body":  {
+                                                  "mode":  "raw",
+                                                  "raw":  "{\"orderId\":{{orderId}},\"approved\":true}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              }
+                                              }
+                                 }
+                 },
+                 {
+                     "name":  "Order details",
+                     "request":  {
+                                     "method":  "GET",
+                                     "header":  [
+
+                                                ],
+                                     "url":  "{{baseUrl}}/api/orders/{{orderId}}",
+                                     "auth":  {
+                                                  "type":  "bearer",
+                                                  "bearer":  [
+                                                                 {
+                                                                     "key":  "token",
+                                                                     "value":  "{{accessToken}}",
+                                                                     "type":  "string"
+                                                                 }
+                                                             ]
+                                              }
+                                 }
+                 },
+                 {
+                     "name":  "Order payments",
+                     "request":  {
+                                     "method":  "GET",
+                                     "header":  [
+
+                                                ],
+                                     "url":  "{{baseUrl}}/api/payments/order/{{orderId}}",
+                                     "auth":  {
+                                                  "type":  "bearer",
+                                                  "bearer":  [
+                                                                 {
+                                                                     "key":  "token",
+                                                                     "value":  "{{accessToken}}",
+                                                                     "type":  "string"
+                                                                 }
+                                                             ]
+                                              }
+                                 }
+                 }
+             ]
 }

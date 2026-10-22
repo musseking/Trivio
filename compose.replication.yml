@@ -4,9 +4,8 @@
 # Use this file together with the main docker-compose.yml file,
 # not as a replacement for it.
 #
-# The Windows MySQL server continues to use port 3306.
-# The Docker MySQL source instances are accessible from the Windows host
-# only through 127.0.0.1 on ports 3307, 3308, 3309, and 3310.
+# MySQL source bindings and published host ports are chosen separately
+# for each installation in its private .env file.
 #
 # This configuration preserves existing Docker volumes and data.
 # It assigns unique server IDs and exposes the MySQL source ports,

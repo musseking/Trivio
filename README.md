@@ -104,7 +104,7 @@ git clone https://github.com/musseking/Trivio.git
 cd Trivio
 ```
 
-Replace the repository URL with the actual GitHub clone URL.
+The clone URL above points to the official Trivio repository.
 
 ### 2. Create your private environment configuration
 
@@ -305,6 +305,8 @@ Operations spanning multiple microservices are not one distributed ACID transact
 The API Gateway forwards requests to the appropriate microservices under the `/api` prefix.
 
 The following routes are defined by the backend controllers.
+
+For manual API testing, see [HTTP examples](api-demo/trivio.http) and the [Postman collection](api-demo/Trivio.postman_collection.json). Configure your own Gateway address and authentication token locally.
 
 ### Authentication and users
 
