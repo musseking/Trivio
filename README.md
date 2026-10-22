@@ -180,6 +180,33 @@ docker compose config --quiet
 
 If the command reports missing variables, review your private `.env`.
 
+### Recommended: One-command development startup
+
+Trivio includes a unified development launcher.
+
+After configuring the private `.env` file and installing
+Docker and Node.js, run `npm run dev` from the repository root.
+
+The launcher automatically:
+
+1. Starts Docker Compose services and MySQL databases.
+2. Waits for the API Gateway and authentication setup endpoint.
+3. Installs frontend dependencies if necessary.
+4. Starts the Vite development server.
+
+Open `http://localhost:5173/` in your browser.
+
+Additional commands:
+
+- `npm run dev:build` - Rebuild backend images and start development.
+- `npm run dev:status` - Show Docker service status.
+- `npm run dev:stop` - Stop Docker services without deleting volumes.
+
+Press Ctrl+C to stop Vite. Docker containers remain running.
+
+The manual startup procedure is documented below.
+
+
 ### 5. Build and start the application
 
 ```bash

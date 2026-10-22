@@ -1,0 +1,12 @@
+{
+  "name": "trivio-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:build": "node scripts/dev.mjs --build",
+    "dev:stop": "docker compose stop",
+    "dev:status": "docker compose ps"
+  }
+}
