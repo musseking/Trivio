@@ -3,6 +3,7 @@ package rs.trivio.auth;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.List;
@@ -35,15 +36,20 @@ public class AuthController {
         @NotBlank @Email @Size(max = 254) String email,
         @NotBlank @Size(min = 12, max = 128) String password) {}
     public record LoginRequest(@NotBlank String email, @NotBlank String password) {}
+    public record UpdateProfileRequest(
+        @NotBlank @Size(max = 80) String firstName,
+        @NotBlank @Size(max = 80) String lastName,
+        @NotBlank @Email @Size(max = 254) String email) {}
     public record TokenResponse(String accessToken, String tokenType, long expiresIn) {}
     public record UserView(Long id, String firstName, String lastName, String email,
-                           UserAccount.Role role, boolean enabled, Instant createdAt) {
+                           UserAccount.Role role, boolean enabled, Instant createdAt, String profilePhotoVersion) {
         public static UserView from(UserAccount u) {
             return new UserView(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(),
-                                u.getRole(), u.isEnabled(), u.getCreatedAt());
+                                u.getRole(), u.isEnabled(), u.getCreatedAt(), u.getProfilePhotoVersion());
         }
     }
     public record ChangeRoleRequest(@NotBlank String role) {}
+    public record ChangeEnabledRequest(@NotNull Boolean enabled) {}
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -74,11 +80,55 @@ public class AuthController {
         return UserView.from(currentUser(jwt));
     }
 
+    @PutMapping("/me")
+    @Transactional
+    public UserView updateProfile(@AuthenticationPrincipal Jwt jwt,
+                                  @Valid @RequestBody UpdateProfileRequest request) {
+        UserAccount user = currentUser(jwt);
+        String email = request.email().trim().toLowerCase(Locale.ROOT);
+        if (users.findByEmail(email).filter(other -> !other.getId().equals(user.getId())).isPresent())
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already registered");
+        user.updateProfile(request.firstName().trim(), request.lastName().trim(), email);
+        try { return UserView.from(users.saveAndFlush(user)); }
+        catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already registered");
+        }
+    }
+
     @GetMapping("/admin/users")
     @Transactional(readOnly = true)
     public List<UserView> listUsers(@AuthenticationPrincipal Jwt jwt) {
         requireOwner(jwt);
         return users.findAll().stream().map(UserView::from).toList();
+    }
+
+    @PutMapping("/admin/users/{id}/enabled")
+    @Transactional
+    public UserView updateEnabled(@AuthenticationPrincipal Jwt jwt, @PathVariable Long id,
+                                  @Valid @RequestBody ChangeEnabledRequest request) {
+        requireOwner(jwt);
+        UserAccount target = manageableUser(jwt, id);
+        target.setEnabled(request.enabled());
+        return UserView.from(users.saveAndFlush(target));
+    }
+
+    @DeleteMapping("/admin/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
+    public void deleteUser(@AuthenticationPrincipal Jwt jwt, @PathVariable Long id) {
+        requireOwner(jwt);
+        UserAccount target = manageableUser(jwt, id);
+        // Orders retain their own customer snapshots in the order-service database.
+        users.delete(target);
+        users.flush();
+    }
+
+    private UserAccount manageableUser(Jwt jwt, Long id) {
+        UserAccount target = users.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        if (target.getRole() == UserAccount.Role.OWNER || id.toString().equals(jwt.getSubject()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot modify OWNER or own account");
+        return target;
     }
 
     @PutMapping("/admin/users/{id}/role")

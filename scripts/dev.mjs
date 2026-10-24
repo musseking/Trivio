@@ -54,11 +54,9 @@ console.log("================================\n");
 
 console.log("[1/3] Starting Docker infrastructure...");
 
-const composeArgs = ["compose", "up", "-d"];
-
-if (process.argv.includes("--build")) {
-  composeArgs.push("--build");
-}
+// Rebuild changed sources before starting: an existing image may lack API methods
+// required by the current frontend. Docker reuses cached layers when unchanged.
+const composeArgs = ["compose", "up", "-d", "--build"];
 
 run("docker", composeArgs);
 

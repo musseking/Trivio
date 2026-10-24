@@ -5,6 +5,9 @@
 *.log
 .env
 .env.*
+**/*.sql.bak
+**/*.sql.gz
+**/*.dump
 **/node_modules
 frontend/dist
 data/vehicle-media

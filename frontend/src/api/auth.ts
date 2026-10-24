@@ -1,5 +1,9 @@
 import { ApiError, request } from './client'
-import type { LoginRequest, OwnerSetupRequest, OwnerSetupStatus, RegisterRequest, TokenResponse, User } from './types'
+import type { LoginRequest, OwnerSetupRequest, OwnerSetupStatus, RegisterRequest, TokenResponse, UpdateProfileRequest, User } from './types'
+
+export function updateMyProfile(accessToken: string, data: UpdateProfileRequest, signal?: AbortSignal): Promise<User> {
+  return request<User>('/auth/me', { method: 'PUT', accessToken, body: data, signal })
+}
 
 /** Fail closed if the setup endpoint is down or returns an unknown response. */
 export async function getOwnerSetupStatus(signal?: AbortSignal): Promise<OwnerSetupStatus> {

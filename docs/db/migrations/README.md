@@ -26,7 +26,9 @@ A separate Windows MySQL instance receives changes through dedicated replication
 ```text
 migrations/
 ├── auth/
-│   └── V001__baseline_schema.sql
+│   ├── V001__baseline_schema.sql
+│   ├── V002__single_owner_bootstrap.sql
+│   └── V003__profile_photos.sql
 ├── order/
 │   └── V001__baseline_schema.sql
 ├── payment/

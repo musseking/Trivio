@@ -11,6 +11,7 @@ For complete installation instructions, see the [main README](../README.md).
 - Customer registration and JWT authentication
 - First-time OWNER account setup
 - OWNER dashboard and vehicle management
+- OWNER user management at `/owner/korisnici`: search, status/role filters, ban/unban, and confirmed deletion
 - Photo uploading and cropping
 - Customer order history
 - Simulated payment integration

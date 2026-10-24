@@ -11,15 +11,15 @@ function encode(canvas: HTMLCanvasElement, mime: string, quality?: number): Prom
 }
 
 // Runs only in the browser after the user confirms cropping; the original File is left untouched.
-export async function cropPhotoFile(file: File, crop: PhotoCrop): Promise<File> {
-  if (isFullPhoto(crop)) return file
+export async function cropPhotoFile(file: File, crop: PhotoCrop, profile = false): Promise<File> {
+  if (isFullPhoto(crop) && !profile) return file
   const bitmap = await createImageBitmap(file)
   try {
     if (bitmap.width * bitmap.height > 20_000_000) {
       throw new Error('Fotografija premašuje dozvoljenih 20 megapiksela.')
     }
     const rectangle = cropToPixels(crop, bitmap.width, bitmap.height)
-    const scale = Math.min(1, MAX_DIMENSION / Math.max(rectangle.width, rectangle.height))
+    const scale = Math.min(1, (profile ? 512 : MAX_DIMENSION) / Math.max(rectangle.width, rectangle.height))
     const canvas = document.createElement('canvas')
     canvas.width = Math.max(1, Math.round(rectangle.width * scale))
     canvas.height = Math.max(1, Math.round(rectangle.height * scale))
@@ -33,7 +33,7 @@ export async function cropPhotoFile(file: File, crop: PhotoCrop): Promise<File> 
     context.drawImage(bitmap, rectangle.x, rectangle.y, rectangle.width, rectangle.height,
       0, 0, canvas.width, canvas.height)
 
-    let mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg'
+    let mime = !profile && file.type === 'image/png' ? 'image/png' : 'image/jpeg'
     let blob = await encode(canvas, mime, mime === 'image/jpeg' ? .92 : undefined)
     if (blob.size > MAX_BYTES) {
       mime = 'image/jpeg'
@@ -45,7 +45,7 @@ export async function cropPhotoFile(file: File, crop: PhotoCrop): Promise<File> 
     if (!blob.size || blob.size > MAX_BYTES) throw new Error('Izabrani kadar je prevelik. Pokušaj sa manjim kadrom.')
     const extension = mime === 'image/png' ? 'png' : 'jpg'
     const basename = file.name.replace(/\.(jpe?g|png)$/i, '')
-    return new File([blob], `${basename}-crop.${extension}`, { type: mime, lastModified: Date.now() })
+    return new File([blob], profile ? 'profile.jpg' : `${basename}-crop.${extension}`, { type: mime, lastModified: Date.now() })
   } finally {
     bitmap.close()
   }

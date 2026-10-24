@@ -13,6 +13,7 @@ export function RouteEffects() {
       : pathname === '/postavljanje' ? 'Prvo podešavanje vlasnika'
       : pathname === '/porudzbine' ? 'Moje porudžbine'
       : pathname === '/owner/automobili/novi' ? 'Dodaj automobil'
+      : pathname === '/owner/korisnici' ? 'Upravljanje korisnicima'
       : pathname.startsWith('/owner/') ? 'OWNER Control panel' : 'Stranica nije pronađena';
     document.title = `${title} | Trivio`;
     document.getElementById('main-content')?.focus({ preventScroll: true });

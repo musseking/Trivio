@@ -3,6 +3,8 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import { useAuth } from '../auth/useAuth';
 import { Icon } from './Icon';
 import { ThemeToggle } from '../theme/ThemeToggle';
+import { ProfileDialog } from './ProfileDialog';
+import { Avatar } from './Avatar';
 
 export function Brand({ light = false }: { light?: boolean }) {
   return <Link className={`brand ${light ? 'brand-light' : ''}`} to="/" aria-label="Trivio — početna">
@@ -14,11 +16,13 @@ export function Brand({ light = false }: { light?: boolean }) {
 export function Layout() {
   const { user, isAuthenticated, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => { setMenuOpen(false); }, [location.pathname, location.search]);
+  useEffect(() => { if (!isAuthenticated) setProfileOpen(false); }, [isAuthenticated]);
   useEffect(() => {
     const onEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && menuOpen) {
@@ -45,12 +49,12 @@ export function Layout() {
             <NavLink to="/" end>Početna</NavLink>
             <NavLink to="/automobili">Automobili</NavLink>
             <NavLink to="/porudzbine">Moje porudžbine</NavLink>
-            {user?.role === 'OWNER' && <NavLink to="/owner/automobili">Control panel</NavLink>}
+            {user?.role === 'OWNER' && <NavLink to="/owner">Control panel</NavLink>}
           </nav>
           <div className="header-actions">
             <ThemeToggle />
             {isAuthenticated ? <>
-              <span className="header-user" title={user?.email}><span className="avatar">{user?.firstName.slice(0, 1)}{user?.lastName.slice(0, 1)}</span><span>Zdravo, {user?.firstName}</span></span>
+              <div className="header-user">{user && <Avatar user={user} onEmptyClick={() => setProfileOpen(true)} />}<button type="button" className="header-user-name" title="Uredi profil" aria-label="Uredi profil" aria-haspopup="dialog" onClick={() => setProfileOpen(true)}>Zdravo, {user?.firstName}</button></div>
               <button type="button" className="button button-ghost header-logout" onClick={signOut}><Icon name="logout" size={17} />Odjavi se</button>
             </> : <>
               <NavLink className="login-link" to="/prijava"><Icon name="user" size={18} />Prijavi se</NavLink>
@@ -60,6 +64,7 @@ export function Layout() {
         </div>
       </div>
     </header>
+    {profileOpen && user && <ProfileDialog key={user.id} user={user} onClose={() => setProfileOpen(false)} />}
     <main id="main-content" tabIndex={-1}><Outlet /></main>
     <footer className="site-footer">
       <div className="container footer-top">

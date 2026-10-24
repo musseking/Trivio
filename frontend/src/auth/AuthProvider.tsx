@@ -1,8 +1,9 @@
 import { createContext, useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { getMe, loginAccount, registerAccount } from '../api/auth'
+import { getMe, loginAccount, registerAccount, updateMyProfile } from '../api/auth'
 import { ApiError, subscribeToUnauthorized } from '../api/client'
-import type { LoginRequest, RegisterRequest, User } from '../api/types'
+import type { LoginRequest, RegisterRequest, UpdateProfileRequest, User } from '../api/types'
+import { uploadProfilePhoto, removeProfilePhoto } from '../api/profile-photo'
 
 export interface AuthContextValue {
   user: User | null
@@ -12,6 +13,8 @@ export interface AuthContextValue {
   login: (data: LoginRequest) => Promise<void>
   register: (data: RegisterRequest) => Promise<void>
   logout: () => void
+  updateProfile: (data: UpdateProfileRequest, signal?: AbortSignal) => Promise<void>
+  updatePhoto: (file: File | null, signal?: AbortSignal) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined)
@@ -118,6 +121,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [beginOperation, finishOperation])
 
+  const updateProfile = useCallback(async (data: UpdateProfileRequest, signal?: AbortSignal) => {
+    const current = sessionRef.current
+    if (!current) throw new ApiError(401, 'Prijavi se ponovo da izmeniš profil.')
+    const user = await updateMyProfile(current.accessToken, data, signal)
+    if (signal?.aborted || sessionRef.current?.accessToken !== current.accessToken) {
+      throw new DOMException('Zahtev je otkazan.', 'AbortError')
+    }
+    updateSession({ ...current, user })
+  }, [updateSession])
+
+  const updatePhoto = useCallback(async (file: File | null, signal?: AbortSignal) => {
+    const current = sessionRef.current
+    if (!current) throw new ApiError(401, 'Prijavi se ponovo da izmeniš sliku.')
+    const user = file ? await uploadProfilePhoto(current.accessToken, file, signal)
+      : await removeProfilePhoto(current.accessToken, signal)
+    if (signal?.aborted || sessionRef.current?.accessToken !== current.accessToken) {
+      throw new DOMException('Zahtev je otkazan.', 'AbortError')
+    }
+    updateSession({ ...sessionRef.current, user })
+  }, [updateSession])
+
   return (
     <AuthContext.Provider value={{
       user: session?.user ?? null,
@@ -127,6 +151,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       register,
       logout,
+      updateProfile,
+      updatePhoto,
     }}>
       {children}
     </AuthContext.Provider>

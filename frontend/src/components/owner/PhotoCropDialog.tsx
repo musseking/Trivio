@@ -5,12 +5,14 @@ import { cropPhotoFile } from '../../lib/photo-crop-file'
 import { cropForAspect, isFullPhoto, moveCrop, resizeCrop, zoomCrop } from '../../lib/photo-crop'
 import type { CropAspect, PhotoCrop } from '../../lib/photo-crop'
 import './photo-crop.css'
+import { useDialogDismiss } from '../../hooks/useDialogDismiss'
 
 type DragState = { mode: 'move' | 'resize'; x: number; y: number; crop: PhotoCrop }
 
-export function PhotoCropDialog({ file, photoNumber, totalPhotos, onApply, onCancel }: {
+export function PhotoCropDialog({ file, photoNumber, totalPhotos, onApply, onCancel, profile = false }: {
   file: File; photoNumber: number; totalPhotos: number
   onApply: (file: File) => void; onCancel: () => void
+  profile?: boolean
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const imageBoxRef = useRef<HTMLDivElement>(null)
@@ -19,17 +21,20 @@ export function PhotoCropDialog({ file, photoNumber, totalPhotos, onApply, onCan
   const helpId = useId()
   const [imageUrl, setImageUrl] = useState('')
   const [size, setSize] = useState({ width: 0, height: 0 })
-  const [aspect, setAspect] = useState<CropAspect>('free')
+  const [aspect, setAspect] = useState<CropAspect>(profile ? '1:1' : 'free')
   const [crop, setCrop] = useState<PhotoCrop>({ x: 0, y: 0, width: 1, height: 1 })
   const [working, setWorking] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const cancelledRef = useRef(false)
+  const dismiss = useDialogDismiss(() => { cancelledRef.current = true; onCancel() })
   const baseCrop = useMemo(() => cropForAspect(aspect, size.width, size.height), [aspect, size])
   const zoom = Math.max(0, Math.min(100, Math.round((1 - crop.width / baseCrop.width) / .0085)))
 
   useEffect(() => {
     const dialog = dialogRef.current
+    cancelledRef.current = false
     dialog?.showModal()
-    return () => { if (dialog?.open) dialog.close() }
+    return () => { cancelledRef.current = true; if (dialog?.open) dialog.close() }
   }, [])
 
   useEffect(() => {
@@ -85,21 +90,22 @@ export function PhotoCropDialog({ file, photoNumber, totalPhotos, onApply, onCan
     setWorking(true)
     setError(null)
     try {
-      onApply(isFullPhoto(crop) ? file : await cropPhotoFile(file, crop))
+      const result = profile ? await cropPhotoFile(file, crop, true) : isFullPhoto(crop) ? file : await cropPhotoFile(file, crop)
+      if (!cancelledRef.current) onApply(result)
     } catch (caught) {
+      if (cancelledRef.current) return
       setError(caught instanceof Error ? caught.message : 'Fotografija nije mogla da bude obrađena.')
       setWorking(false)
     }
   }
 
-  return <dialog className="owner-dialog photo-crop-dialog" ref={dialogRef} aria-labelledby={headingId} aria-describedby={helpId}
-    onCancel={(event) => { event.preventDefault(); if (!working) onCancel() }}>
+  return <dialog className="owner-dialog photo-crop-dialog" ref={dialogRef} aria-labelledby={headingId} aria-describedby={helpId} {...dismiss}>
     <div className="photo-crop-heading">
       <div>
-        <p className="eyebrow">UREĐIVANJE FOTOGRAFIJE {photoNumber}/{totalPhotos}</p>
+        <p className="eyebrow">{profile ? 'PROFILNA SLIKA' : `UREĐIVANJE FOTOGRAFIJE ${photoNumber}/${totalPhotos}`}</p>
         <h2 id={headingId}>Izaberi deo fotografije</h2>
       </div>
-      <div className="photo-crop-heading-icon"><Icon name="car" size={22} /></div>
+      <div className="photo-crop-heading-icon"><Icon name={profile ? 'user' : 'car'} size={22} /></div>
     </div>
     <p id={helpId} className="photo-crop-help">Prevuci označeni okvir da pomeriš kadar, a donji desni ugao da promeniš njegovu veličinu. Sačuvaće se samo označeni deo fotografije.</p>
     <div className="photo-crop-stage">
@@ -111,6 +117,7 @@ export function PhotoCropDialog({ file, photoNumber, totalPhotos, onApply, onCan
               setError('Fotografija premašuje dozvoljenih 20 megapiksela.')
             } else if (naturalWidth && naturalHeight) {
               setSize({ width: naturalWidth, height: naturalHeight })
+              setCrop(cropForAspect(aspect, naturalWidth, naturalHeight))
             }
           }}
           onError={() => setError('Fotografija nije mogla da se otvori. Izaberi drugu datoteku.')} />
@@ -130,10 +137,10 @@ export function PhotoCropDialog({ file, photoNumber, totalPhotos, onApply, onCan
     </div>
     <div className="photo-crop-controls">
       <label className="photo-crop-aspect">Format kadra
-        <select value={aspect} disabled={working || !size.width} onChange={(event) => selectAspect(event.target.value as CropAspect)}>
-          <option value="free">Slobodan</option>
+        <select value={aspect} disabled={profile || working || !size.width} onChange={(event) => selectAspect(event.target.value as CropAspect)}>
+          {!profile && <><option value="free">Slobodan</option>
           <option value="4:3">4:3 — fotografija</option>
-          <option value="16:9">16:9 — široki kadar</option>
+          <option value="16:9">16:9 — široki kadar</option></>}
           <option value="1:1">1:1 — kvadrat</option>
         </select>
       </label>
@@ -146,7 +153,7 @@ export function PhotoCropDialog({ file, photoNumber, totalPhotos, onApply, onCan
     {error && <p className="form-error" role="alert">{error}</p>}
     <div className="photo-crop-actions">
       <button type="button" className="button button-secondary" disabled={working} onClick={onCancel}>Odustani</button>
-      <button type="button" className="button button-ghost" disabled={working || !size.width} onClick={() => onApply(file)}>Bez sečenja</button>
+      {!profile && <button type="button" className="button button-ghost" disabled={working || !size.width} onClick={() => onApply(file)}>Bez sečenja</button>}
       <button type="button" className="button button-primary" disabled={working || !size.width || Boolean(error)} onClick={() => void apply()}>{working ? 'Obrada…' : photoNumber < totalPhotos ? 'Sačuvaj i nastavi' : 'Sačuvaj kadar'}</button>
     </div>
   </dialog>

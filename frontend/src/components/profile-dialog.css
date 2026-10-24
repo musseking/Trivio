@@ -1,0 +1,19 @@
+.header-user { border: 0; background: transparent; color: inherit; padding: 6px; border-radius: 8px; text-align: left; }
+.header-user:hover { background: var(--soft-accent); }
+.profile-dialog { width: min(520px, calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 30px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); color: var(--ink); box-shadow: 0 24px 90px #071b2350; }
+.profile-dialog::backdrop { background: #06191199; }
+.profile-dialog-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.profile-dialog-heading .eyebrow { margin-bottom: 8px; }
+.profile-dialog h2 { font-size: 29px; font-weight: 550; letter-spacing: -1px; margin-bottom: 16px; }
+.profile-dialog > p { font-size: 13px; line-height: 1.7; margin-bottom: 24px; }
+.profile-dialog-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+.profile-photo-editor { display: flex; align-items: center; gap: 18px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+.profile-photo-editor strong { font-size: 13px; }
+.profile-photo-editor p { color: var(--muted); font-size: 10px; line-height: 1.6; margin: 7px 0; }
+.profile-photo-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.profile-photo-actions .button { font-size: 11px; min-height: 36px; padding: 8px 11px; }
+@media (max-width: 450px) {
+  .profile-dialog { padding: 22px; }
+  .profile-dialog .form-grid { grid-template-columns: 1fr; gap: 0; }
+  .profile-dialog-actions { flex-direction: column-reverse; }
+}

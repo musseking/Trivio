@@ -25,6 +25,7 @@ interface RequestOptions {
   accessToken?: string
   signal?: AbortSignal
   timeoutMs?: number
+  responseType?: 'json' | 'blob'
 }
 
 function errorMessage(status: number, path: string): string {
@@ -40,7 +41,7 @@ function errorMessage(status: number, path: string): string {
     case 404: return 'Traženi podatak nije pronađen.'
     case 409:
       if (path === '/auth/setup/owner') return 'Vlasnički nalog već postoji ili je ova email adresa zauzeta. Proveri stanje podešavanja.'
-      return path === '/auth/register'
+      return path === '/auth/register' || path === '/auth/me'
         ? 'Nalog sa ovom email adresom već postoji.'
         : 'Zahtev nije moguće izvršiti zbog trenutnog stanja podataka.'
     case 413: return 'Datoteka ili ukupan zahtev je prevelik. Svaka fotografija može imati najviše 5 MiB.'
@@ -73,14 +74,15 @@ export function getErrorMessage(error: unknown): string {
 }
 
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const headers: Record<string, string> = { Accept: 'application/json' }
+  const headers: Record<string, string> = { Accept: options.responseType === 'blob' ? 'image/jpeg' : 'application/json' }
   const multipart = typeof FormData !== 'undefined' && options.body instanceof FormData
   // The browser must generate the multipart boundary for photo uploads.
   if (options.body !== undefined && !multipart) headers['Content-Type'] = 'application/json'
   if (options.accessToken) headers.Authorization = `Bearer ${options.accessToken}`
 
   let response: Response
-  let text: string
+  let text = ''
+  let binary: Blob | undefined
   const controller = new AbortController()
   let timedOut = false
   const abort = () => controller.abort(options.signal?.reason)
@@ -98,7 +100,8 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
       credentials: 'omit',
       signal: controller.signal,
     })
-    text = await response.text()
+    if (response.ok && options.responseType === 'blob') binary = await response.blob()
+    else text = await response.text()
   } catch (error) {
     if (timedOut) throw new ApiError(504, 'Server nije odgovorio na vreme. Pokušaj ponovo.')
     if (isAbortError(error)) throw error
@@ -109,6 +112,7 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
     options.signal?.removeEventListener('abort', abort)
   }
 
+  if (binary !== undefined) return binary as T
   let payload: unknown
   if (text.trim()) {
     try { payload = JSON.parse(text) as unknown } catch {

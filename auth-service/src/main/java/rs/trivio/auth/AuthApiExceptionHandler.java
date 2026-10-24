@@ -20,6 +20,11 @@ import org.springframework.web.server.ResponseStatusException;
 @RestControllerAdvice(basePackageClasses = AuthController.class)
 public class AuthApiExceptionHandler {
 
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiError> uploadTooLarge() {
+        return ResponseEntity.status(413).body(new ApiError("UPLOAD_TOO_LARGE", "Photo is too large", List.of("file")));
+    }
+
     public record ApiError(String code, String message, List<String> fields) {}
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

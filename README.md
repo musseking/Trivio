@@ -12,8 +12,10 @@ The project includes a React web application for customers and dealership admini
 
 - Public vehicle catalog with search, filtering, and vehicle details
 - Customer registration and JWT authentication
+- Cropped profile photos with authenticated access, image preview, and metadata removal
 - Secure first-time OWNER account setup
 - OWNER vehicle inventory management
+- OWNER user management with search, account banning/unbanning, and confirmed account deletion
 - Vehicle photo uploads, gallery management, and cropping
 - Vehicle reservation and purchase order workflows
 - Simulated successful and declined payments
@@ -189,7 +191,7 @@ Docker and Node.js, run `npm run dev` from the repository root.
 
 The launcher automatically:
 
-1. Starts Docker Compose services and MySQL databases.
+1. Builds backend images from current sources, then starts Docker Compose services and MySQL databases. Unchanged build layers are cached.
 2. Waits for the API Gateway and authentication setup endpoint.
 3. Installs frontend dependencies if necessary.
 4. Starts the Vite development server.
@@ -198,7 +200,7 @@ Open `http://localhost:5173/` in your browser.
 
 Additional commands:
 
-- `npm run dev:build` - Rebuild backend images and start development.
+- `npm run dev:build` - Alias for `npm run dev`; both rebuild backend images before starting development.
 - `npm run dev:status` - Show Docker service status.
 - `npm run dev:stop` - Stop Docker services without deleting volumes.
 

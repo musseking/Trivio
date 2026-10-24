@@ -1,0 +1,47 @@
+.owner-navigation { display: flex; gap: 8px; padding-bottom: 20px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+.owner-navigation a { display: inline-flex; align-items: center; gap: 9px; border-radius: 8px; padding: 12px 18px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.owner-navigation a:hover { background: var(--panel-soft); color: var(--green); }
+.owner-navigation a.active { color: var(--green); background: var(--soft-accent); }
+.owner-summary.users-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.owner-filters.users-filters { grid-template-columns: minmax(0, 1fr) 160px 180px; }
+.users-table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.users-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
+.users-table thead { background: var(--panel-soft); color: var(--muted); }
+.users-table th, .users-table td { padding: 20px 18px; }
+.users-table thead th { font-size: 10px; font-weight: 650; letter-spacing: .5px; }
+.users-table tbody tr + tr { border-top: 1px solid var(--line); }
+.users-table tbody tr:hover { background: var(--panel-soft); }
+.users-table tbody th { font-weight: 400; min-width: 240px; }
+.users-identity { display: flex; align-items: center; gap: 12px; }
+.users-identity > div { min-width: 0; }
+.users-identity strong { display: block; font-size: 13px; font-weight: 650; overflow-wrap: anywhere; }
+.users-identity div > span { display: block; margin-top: 5px; color: var(--muted); overflow-wrap: anywhere; }
+.users-identity small { display: block; margin-top: 5px; color: var(--muted); font-size: 9px; }
+.users-you { display: inline-block; margin-left: 8px; font-size: 9px; padding: 3px 6px; border-radius: 4px; background: var(--soft-accent); color: var(--green); }
+.users-status, .users-protected { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; white-space: nowrap; }
+.users-status { padding: 7px 9px; border-radius: 5px; }
+.users-status.is-active { background: var(--notice-bg); color: var(--notice-ink); }
+.users-status.is-banned { background: var(--error-bg); color: var(--error-ink); }
+.users-protected { color: var(--muted); }
+.users-date { white-space: nowrap; color: var(--muted); }
+.users-actions { display: flex; gap: 8px; }
+.users-actions .button { font-size: 10px; gap: 7px; padding: 9px 12px; min-height: 38px; white-space: nowrap; }
+.users-delete { color: var(--error-ink); background: transparent; border-color: var(--error-border); }
+.users-delete:hover { background: var(--error-bg); }
+.button-danger { background: #a2372c; color: white; border-color: #a2372c; }
+.button-danger:not(:disabled):hover { background: #852a22; }
+.users-pagination { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 20px; }
+.users-pagination > span { color: var(--muted); font-size: 11px; }
+@media (max-width: 820px) {
+  .owner-filters.users-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .users-table th, .users-table td { padding: 16px 14px; }
+}
+@media (max-width: 600px) {
+  .owner-navigation a { padding: 11px 15px; font-size: 12px; }
+  .owner-summary.users-summary { grid-template-columns: 1fr; }
+  .users-summary > div { padding: 15px; }
+  .users-summary > div > span { font-size: 11px; display: flex; align-items: center; justify-content: space-between; flex: 1; gap: 12px; }
+  .users-summary strong { margin: 0; }
+  .users-pagination .button { padding-inline: 10px; gap: 6px; font-size: 10px; }
+  .users-pagination > span { font-size: 10px; }
+}

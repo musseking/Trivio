@@ -65,11 +65,18 @@ export interface User {
   role: UserRole
   enabled: boolean
   createdAt: string
+  profilePhotoVersion?: string | null
 }
 
 export interface LoginRequest {
   email: string
   password: string
+}
+
+export interface UpdateProfileRequest {
+  firstName: string
+  lastName: string
+  email: string
 }
 
 export interface RegisterRequest extends LoginRequest {

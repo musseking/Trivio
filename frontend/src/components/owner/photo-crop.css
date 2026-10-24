@@ -1,5 +1,5 @@
 /* Photo cropping is client-only; nothing is uploaded until the existing gallery confirmation. */
-.photo-crop-dialog {
+.owner-dialog.photo-crop-dialog {
   width: min(760px, calc(100vw - 26px));
   padding: clamp(18px, 3vw, 29px);
   max-height: calc(100dvh - 30px);

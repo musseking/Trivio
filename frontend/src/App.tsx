@@ -13,6 +13,7 @@ import OrdersPage from './pages/OrdersPage';
 import NotFoundPage from './pages/NotFoundPage';
 import OwnerVehiclesPage from './pages/owner/OwnerVehiclesPage';
 import OwnerVehicleFormPage from './pages/owner/OwnerVehicleFormPage';
+import OwnerUsersPage from './pages/owner/OwnerUsersPage';
 
 export default function App() {
   return <>
@@ -29,6 +30,8 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="porudzbine" element={<OrdersPage />} />
           <Route element={<OwnerRoute />}>
+            <Route path="owner" element={<Navigate to="/owner/automobili" replace />} />
+            <Route path="owner/korisnici" element={<OwnerUsersPage />} />
             <Route path="owner/automobili" element={<OwnerVehiclesPage />} />
             <Route path="owner/automobili/novi" element={<OwnerVehicleFormPage />} />
             <Route path="owner/automobili/:id/uredi" element={<OwnerVehicleFormPage />} />

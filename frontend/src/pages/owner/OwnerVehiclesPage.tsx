@@ -8,6 +8,7 @@ import { AsyncState } from '../../components/AsyncState'
 import { Icon } from '../../components/Icon'
 import { StatusBadge } from '../../components/StatusBadge'
 import { ConfirmDialog } from '../../components/owner/ConfirmDialog'
+import { OwnerNavigation } from '../../components/owner/OwnerNavigation'
 import { useAsyncResource } from '../../hooks/useAsyncResource'
 import { formatFuel, formatMileage, formatPrice } from '../../lib/format'
 
@@ -71,6 +72,7 @@ export default function OwnerVehiclesPage() {
   }
 
   return <section className="container owner-page page-space">
+    <OwnerNavigation />
     <nav className="breadcrumbs" aria-label="Putanja"><Link to="/">Početna</Link><Icon name="chevron-right" size={14} /><span aria-current="page">Upravljanje ponudom</span></nav>
     <div className="owner-page-heading"><div><p className="eyebrow">TRIVIO / VLASNIČKI PANEL</p><h1 className="page-title">Tvoja ponuda. Pod kontrolom.</h1><p className="page-description">Dodaj automobile, uredi detalje i fotografije ili povuci vozilo iz ponude.</p></div>
       <Link className="button button-primary" to="/owner/automobili/novi">Dodaj automobil<Icon name="arrow-right" size={18} /></Link></div>

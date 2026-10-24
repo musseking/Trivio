@@ -10,6 +10,7 @@ const paths = {
   menu: 'M4 6h16M4 12h16M4 18h16',
   close: 'm6 6 12 12M18 6 6 18',
   user: 'M20 21v-2a7 7 0 0 0-14 0v2M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z',
+  trash: 'M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7',
   car: 'm5 7 2-4h10l2 4M3 8h18v11h-3v-3H6v3H3V8Zm1 4h3m10 0h3M8 8V4m8 4V4',
   shield: 'm12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Zm-4 9 3 3 5-6',
   check: 'm5 12 4 4L19 6',

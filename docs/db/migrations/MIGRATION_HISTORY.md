@@ -99,6 +99,16 @@ The public vehicle catalog was successfully retrieved through the API Gateway, r
 
 ## Future Migration Records
 
+### Auth V003 — Profile photos
+
+- File: `auth/V003__profile_photos.sql`.
+- Database: local Docker source `users_db`.
+- Executed: October 23, 2026. Status: successfully applied after a local database backup.
+- Added nullable `users.profile_photo_version` and `user_profile_photos` with an `ON DELETE CASCADE` foreign key.
+- Existing accounts and authentication data were preserved. Image bytes are kept separately from user list/identity responses.
+- External replication was not checked as part of this change.
+- Associated Git commit: pending.
+
 Every subsequent migration must be documented in this file, including:
 
 - Microservice and migration version.

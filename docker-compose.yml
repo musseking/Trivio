@@ -74,6 +74,7 @@ services:
       - users-db-data:/var/lib/mysql
       - ./docs/db/migrations/auth/V001__baseline_schema.sql:/docker-entrypoint-initdb.d/001_baseline.sql:ro
       - ./docs/db/migrations/auth/V002__single_owner_bootstrap.sql:/docker-entrypoint-initdb.d/002_single_owner_bootstrap.sql:ro
+      - ./docs/db/migrations/auth/V003__profile_photos.sql:/docker-entrypoint-initdb.d/003_profile_photos.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "MYSQL_PWD=\"$${MYSQL_ROOT_PASSWORD}\" mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1"]
       interval: 5s
