@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { Vehicle } from '../api/types';
 import { formatFuel, formatMileage, formatPrice } from '../lib/format';
 import { Icon } from './Icon';
@@ -6,8 +6,10 @@ import { StatusBadge } from './StatusBadge';
 import { VehicleImage, coverPhoto } from './VehicleImage';
 
 export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
+  const location = useLocation();
+  const catalogReturnTo = location.pathname === '/automobili' ? location.pathname + location.search : '/automobili';
   return <article className="vehicle-card">
-    <Link className="vehicle-card-link" to={`/automobili/${vehicle.id}`}>
+    <Link className="vehicle-card-link" to={`/automobili/${vehicle.id}`} state={{ catalogReturnTo }}>
       <div className="vehicle-card-image">
         <VehicleImage photo={coverPhoto(vehicle.photos)} alt={`${vehicle.brand} ${vehicle.model}`} />
         <div className="vehicle-card-status"><StatusBadge status={vehicle.status} /></div>

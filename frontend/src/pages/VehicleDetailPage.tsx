@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { getVehicle } from '../api/vehicles';
 import { ApiError, getErrorMessage } from '../api/client';
 import { useAuth } from '../auth/useAuth';
@@ -12,6 +12,9 @@ import { VehicleGallery } from '../components/VehicleGallery';
 
 export default function VehicleDetailPage() {
   const { id = '' } = useParams();
+  const location = useLocation();
+  const returnTo = (location.state as { catalogReturnTo?: unknown } | null)?.catalogReturnTo;
+  const catalogLink = typeof returnTo === 'string' && /^\/automobili(?:\?[^#]*)?$/.test(returnTo) ? returnTo : '/automobili';
   const { isAuthenticated } = useAuth();
   const loader = useCallback((signal: AbortSignal) => {
     if (!/^[1-9]\d*$/.test(id)) return Promise.reject(new ApiError(404, 'Automobil nije pronađen.'));
@@ -20,7 +23,8 @@ export default function VehicleDetailPage() {
   const { data: vehicle, isLoading, error, retry } = useAsyncResource(loader);
 
   return <div className="container detail-page page-space">
-    <nav className="breadcrumbs" aria-label="Putanja"><Link to="/">Početna</Link><Icon name="chevron-right" size={14} /><Link to="/automobili">Automobili</Link><Icon name="chevron-right" size={14} /><span aria-current="page">{vehicle ? `${vehicle.brand} ${vehicle.model}` : 'Detalji vozila'}</span></nav>
+    <Link className="detail-return" to={catalogLink} aria-label="Nazad na listu automobila" title="Nazad na listu automobila"><Icon name="arrow-left" size={22} /><span>Nazad na ponudu</span></Link>
+    <nav className="breadcrumbs" aria-label="Putanja"><Link to="/">Početna</Link><Icon name="chevron-right" size={14} /><Link to={catalogLink}>Automobili</Link><Icon name="chevron-right" size={14} /><span aria-current="page">{vehicle ? `${vehicle.brand} ${vehicle.model}` : 'Detalji vozila'}</span></nav>
     {isLoading ? <AsyncState kind="loading" title="Učitavamo detalje automobila…" />
       : error ? <AsyncState kind="error" title={error instanceof ApiError && error.status === 404 ? 'Ovaj automobil nije pronađen' : 'Detalji trenutno nisu dostupni'} description={getErrorMessage(error)} onRetry={error instanceof ApiError && error.status === 404 ? undefined : retry} action={<Link className="button button-secondary" to="/automobili"><Icon name="arrow-left" size={17} />Nazad na ponudu</Link>} />
       : vehicle && <>
@@ -46,7 +50,7 @@ export default function VehicleDetailPage() {
           <div className="price-card"><span className="eyebrow">CENA AUTOMOBILA</span><p className="detail-price">{formatPrice(vehicle.price)}</p><div className="price-card-divider" /><div className="availability-note"><Icon name={!vehicle.archived && vehicle.status === 'AVAILABLE' ? 'check-circle' : 'clock'} size={22} /><div><strong>{vehicle.archived ? 'Povučen iz ponude' : vehicle.status === 'AVAILABLE' ? 'Dostupan u ponudi' : vehicle.status === 'RESERVED' ? 'Automobil je rezervisan' : 'Automobil je prodat'}</strong><p>{!vehicle.archived && vehicle.status === 'AVAILABLE' ? 'Pogledaj sve karakteristike pre svog izbora.' : 'Pogledaj i ostale automobile iz naše ponude.'}</p></div></div><Link className="button button-primary button-full" to="/automobili">Istraži ostale automobile<Icon name="arrow-right" size={18} /></Link></div>
           <div className="account-callout"><span className="account-callout-icon"><Icon name="user" size={23} /></span><h3>Tvoj prostor za pregled.</h3><p>Prati postojeće porudžbine i njihove statuse na svom Trivio nalogu.</p><Link className="text-link" to={isAuthenticated ? '/porudzbine' : '/prijava'}>{isAuthenticated ? 'Moje porudžbine' : 'Prijavi se'}<Icon name="arrow-right" size={17} /></Link></div>
         </aside></div>
-        <Link className="text-link detail-back" to="/automobili"><Icon name="arrow-left" size={18} />Nazad na sve automobile</Link>
+        <Link className="text-link detail-back" to={catalogLink}><Icon name="arrow-left" size={18} />Nazad na sve automobile</Link>
       </>}
   </div>;
 }

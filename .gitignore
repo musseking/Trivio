@@ -21,6 +21,8 @@ coverage/
 
 # Environment variables and secrets
 .env
+/.catalog-owner-token
+/.local/
 .env.*
 !.env.example
 

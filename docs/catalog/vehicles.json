@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "currency": "EUR",
+  "powerUnit": "PS (metričke KS); postojeće API polje enginePowerHp",
+  "notice": "Studentska demonstracija: cene, kilometraže i konfiguracije su primeri ponude, a ne stvarni oglasi. Fotografije ilustruju odgovarajući model i generaciju. Bez VIN-a, registarskih oznaka i navoda o servisnoj istoriji.",
+  "vehicles": [
+    {
+      "key": "porsche", "brand": "Porsche", "model": "911 Turbo S", "year": 2023,
+      "price": 229900, "mileage": 14500, "fuelType": "PETROL", "transmission": "PDK, 8 stepeni", "enginePowerHp": 650, "color": "Siva",
+      "description": "Ikona sportskog automobilizma u izdanju 992.1 Coupé. Bokser motor od 3,8 litara sa dva turbopunjača razvija 650 KS i 800 Nm, uz osmostepeni PDK menjač i pogon na sva četiri točka. Preciznost i snažno međuubrzanje prate prepoznatljiva silueta modela 911 i kabina usmerena ka vozaču. Izbor za ljubitelje vrhunskih performansi koji cene i upotrebljivost na dužim putovanjima.",
+      "sources": ["https://newsroom.porsche.com/en/2020/products/porsche-new-911-turbo-s-coupe-cabriolet-top-of-the-range-premiere-20110.html"]
+    },
+    {
+      "key": "mercedes", "brand": "Mercedes-Benz", "model": "S 580 4MATIC Long", "year": 2022,
+      "price": 119900, "mileage": 32000, "fuelType": "PETROL", "transmission": "9G-TRONIC, 9 stepeni", "enginePowerHp": 503, "color": "Obsidian crna metalik",
+      "description": "S-Klasa generacije V223 u produženoj karoseriji spaja reprezentativan nastup i mirnoću putovanja. Četvorolitarski V8 biturbo razvija 503 KS i 700 Nm; 48 V blagi hibrid podržava rad pogona, bez sabiranja privremenog električnog boosta u deklarisanu snagu motora. Pogon 4MATIC i devetostepeni 9G-TRONIC dopunjuju karakter luksuzne limuzine. Prostran zadnji deo kabine i čist, digitalni kokpit oblikuju prostor za putovanja sa stilom.",
+      "sources": ["https://media.mercedes-benz.com/article/ca347c90-5815-4720-a61d-e1961a0315c6"]
+    },
+    {
+      "key": "bmw-m8", "brand": "BMW", "model": "M8 Competition Coupé", "year": 2020,
+      "price": 109900, "mileage": 28000, "fuelType": "PETROL", "transmission": "M Steptronic, 8 stepeni", "enginePowerHp": 625, "color": "Crna metalik",
+      "description": "M8 Competition generacije F92 donosi sportski karakter BMW M odeljenja u elegantan luksuzni kupe. V8 biturbo od 4,4 litra razvija 625 KS i 750 Nm, uparen sa osmostepenim M Steptronic menjačem i sistemom M xDrive. Karoserija sa dvoja vrata i rasporedom 2+2 nudi prepoznatljiv grand touring doživljaj, uz performanse koje odgovaraju oznaci Competition. Odmeren nastup i snažan pogon daju ovom kupeu poseban karakter.",
+      "sources": ["https://www.press.bmwgroup.com/asia/article/detail/T0304286EN/the-first-ever-bmw-m8-competition-coupe-now-available-in-singapore"]
+    },
+    {
+      "key": "audi-rs7", "brand": "Audi", "model": "RS7 Sportback Performance", "year": 2024,
+      "price": 149900, "mileage": 12000, "fuelType": "PETROL", "transmission": "Tiptronic, 8 stepeni", "enginePowerHp": 630, "color": "Daytona siva",
+      "description": "RS7 Sportback Performance generacije C8 povezuje siluetu kupea sa praktičnošću petoro vrata. Četvorolitarski V8 biturbo TFSI razvija 630 KS i 850 Nm, uz osmostepeni tiptronic i quattro pogon. Performance varijanta donosi snažniji pogon od osnovnog RS7 sa 600 KS. Širok stav karoserije, pregledan digitalni kokpit i prostor za svakodnevna putovanja čine ga izrazito sposobnim luksuznim gran turizmom.",
+      "sources": ["https://www.audi.com/en/high-performance-at-its-most-beautiful-the-audi-rs-7-sportback-and-the-rs-7-sportback-performance-12082/dynamic-power-meets-expressive-design-the-rs-7-sportback-performance-12083"],
+      "photoGap": "Čekaju se korisnikove fotografije uz potvrdu prava: C8 Performance, ne osnovni RS7 niti C7 Performance."
+    },
+    {
+      "key": "lamborghini", "brand": "Lamborghini", "model": "Huracán EVO", "year": 2021,
+      "price": 249900, "mileage": 9500, "fuelType": "PETROL", "transmission": "LDF DCT, 7 stepeni", "enginePowerHp": 640, "color": "Narandžasta",
+      "description": "Huracán EVO Coupé sa pogonom na sva četiri točka čuva karakter atmosferskog V10 motora. Zapremina od 5,2 litra, 640 KS i 600 Nm pružaju izrazito neposredan odziv, dok sedmostepeni menjač sa dvostrukim kvačilom prati ritam vožnje. Sistem LDVI povezuje upravljanje dinamikom vozila, uz upravljanje i zadnjim točkovima. Niska silueta i jasne linije stvaraju prepoznatljiv nastup italijanskog supersportskog automobila.",
+      "sources": ["https://www.lamborghini.com/en-en/models/huracan/huracan-EVO"]
+    },
+    {
+      "key": "ferrari", "brand": "Ferrari", "model": "Roma", "year": 2021,
+      "price": 209900, "mileage": 18000, "fuelType": "PETROL", "transmission": "F1 DCT, 8 stepeni", "enginePowerHp": 620, "color": "Crvena",
+      "description": "Roma vraća eleganciju klasičnog Ferrari gran turizma kroz savremene proporcije kupea 2+. Prednje centralno postavljen V8 biturbo od 3,9 litara razvija 620 KS i 760 Nm. Osmostepeni F1 menjač sa dvostrukim kvačilom prenosi snagu na zadnje točkove. Smirene spoljašnje linije i kabina sa dva jasno oblikovana prostora za vozača i suvozača naglašavaju njegov putni karakter, uz performanse koje pripadaju Maranellu.",
+      "sources": ["https://cdn.ferrari.com/cms/network/media/pdf/cs_ferrari_roma_full_gbr.pdf"]
+    },
+    {
+      "key": "bentley", "brand": "Bentley", "model": "Continental GT Speed", "year": 2022,
+      "price": 239900, "mileage": 21000, "fuelType": "PETROL", "transmission": "DCT, 8 stepeni", "enginePowerHp": 659, "color": "Bela",
+      "description": "Continental GT Speed treće generacije predstavlja snažan izraz britanskog grand touringa. Šestolitarski W12 biturbo razvija 659 KS i 900 Nm, uz osmostepeni menjač sa dvostrukim kvačilom i pogon na sva četiri točka. Upravljanje zadnjim točkovima doprinosi okretnosti luksuznog kupea. Bogato oblikovana kabina i mirnoća pri dugim putovanjima dopunjuju njegov sportski potencijal. Ovo je W12 izdanje, pre kasnije hibridne generacije.",
+      "sources": ["https://www.bentleymedia.com/en/newsitem/1200-the-most-dynamic-bentley-road-car-in-history-the-new-continental-gt-speed"]
+    },
+    {
+      "key": "rolls-royce", "brand": "Rolls-Royce", "model": "Ghost", "year": 2021,
+      "price": 289900, "mileage": 19000, "fuelType": "PETROL", "transmission": "Automatski, 8 stepeni", "enginePowerHp": 571, "color": "Srebrna",
+      "description": "Ghost druge generacije donosi uzdržanu eleganciju i karakteristično miran nastup marke Rolls-Royce. V12 biturbo od 6,75 litara razvija 571 KS i 850 Nm, uz osmostepeni automatski menjač, pogon na sva četiri točka i upravljanje zadnjim točkovima. Osnovna Ghost konfiguracija razlikuje se od snažnije varijante Black Badge. Proporcije limuzine i pažljivo oblikovan enterijer stavljaju udobnost putnika u prvi plan.",
+      "sources": ["https://www.press.rolls-roycemotorcars.com/rolls-royce-motor-cars-pressclub/article/detail/T0315469EN/the-new-rolls-royce-ghost/1000"]
+    },
+    {
+      "key": "aston", "brand": "Aston Martin", "model": "DB12", "year": 2024,
+      "price": 239900, "mileage": 8500, "fuelType": "PETROL", "transmission": "ZF automatski, 8 stepeni", "enginePowerHp": 680, "color": "Zelena metalik",
+      "description": "DB12 Coupé spaja prepoznatljivu britansku eleganciju sa snažnim V8 karakterom. Četvorolitarski biturbo motor razvija 680 KS i 800 Nm, uz osmostepeni ZF automatski menjač i zadnji pogon sa elektronski kontrolisanim diferencijalom. Nova generacija kabine donosi savremen raspored komandi i centralni ekran. Izdužena hauba i široka ramena prate karakter automobila namenjenog i dinamičnoj vožnji i dugim putovanjima.",
+      "sources": ["https://www.astonmartin.com/en-us/our-world/news/2023/5/24/introducing-the-aston-martin-db12-the-world-s-first-super-tourer", "https://www.astonmartin.com/en/models/brochures/db12-brochure"]
+    },
+    {
+      "key": "range-rover", "brand": "Land Rover", "model": "Range Rover SV P615 LWB", "year": 2024,
+      "price": 224900, "mileage": 16000, "fuelType": "PETROL", "transmission": "Automatski, 8 stepeni", "enginePowerHp": 615, "color": "Ostuni biserno bela",
+      "description": "Range Rover SV generacije L460, sa produženim međuosovinskim rastojanjem, oblikovan je kao luksuzni prostor za putovanja. P615 konfiguracija modelskog godišta 2024 koristi 4,4-litarski V8 biturbo sa 615 KS, 48 V blagim hibridom, osmostepenim automatskim menjačem i pogonom na sva četiri točka. Čiste površine karoserije i prostrana kabina naglašavaju miran, reprezentativan karakter. Ovo je SV izvedba modela Range Rover, različita od modela Range Rover Sport SV.",
+      "sources": ["https://media.jlr.com/range-rover/de-de/news/2024/05/noch-mehr-range-rover-im-modelljahr-2024-hochmoderne-technologien-und-mehr"]
+    },
+    {
+      "key": "ferrari-spider", "brand": "Ferrari", "model": "488 Spider", "year": 2017,
+      "price": 239900, "mileage": 24500, "fuelType": "PETROL", "transmission": "F1 DCT, 7 stepeni", "enginePowerHp": 670, "color": "Blu Tour de France metalik",
+      "description": "Ferrari 488 Spider spaja karakter centralno postavljenog V8 motora sa doživljajem vožnje pod otvorenim nebom. Biturbo agregat od 3,9 litara razvija 670 KS i 760 Nm, uz sedmostepeni F1 menjač sa dvostrukim kvačilom i zadnji pogon. Sklopivi tvrdi krov omogućava da elegantna zatvorena silueta za nekoliko trenutaka ustupi mesto otvorenom kokpitu. Plava metalik boja naglašava oble bokove i izražene bočne usisnike ovog italijanskog dvoseda. Izabrana je standardna 488 Spider konfiguracija sa 670 KS.",
+      "sources": ["https://www.ferrari.com/en-EN/auto/488-spider", "https://cdn.ferrari.com/cms/network/media/pdf/12_prospectus_ferrari_n_v_eu_20160103.pdf", "https://www.ferrarisouthbay.com/new-vehicles/488-spider"]
+    },
+    {
+      "key": "mclaren-senna", "brand": "McLaren", "model": "Senna", "year": 2019,
+      "price": 1199900, "mileage": 4200, "fuelType": "PETROL", "transmission": "SSG DCT, 7 stepeni", "enginePowerHp": 800, "color": "Narandžasta i crna",
+      "description": "McLaren Senna iz serije Ultimate oblikovan je oko neposredne veze između vozača, automobila i staze. Četvorolitarski V8 biturbo M840TR razvija 800 KS i 800 Nm, uz sedmostepeni SSG menjač sa dvostrukim kvačilom i zadnji pogon. Karbonska struktura Monocage III, izražena aerodinamika i veliko aktivno zadnje krilo određuju njegov prepoznatljiv izgled. Funkcionalna kabina sa sportskim sedištima stavlja vozača u središte doživljaja. U ponudi je drumska Senna konfiguracija sa 800 KS.",
+      "sources": ["https://www.mclaren.com/cars/gl_en/ultimate-models/mclaren-senna", "https://www.carpaints.co/src/Frontend/Files/Cars/Models/OrderingGuides/mclaren-senna-product-guide-v3-march-2018_edc606ef9acfc7b52a6a583d991bad3146df7b65.pdf"]
+    },
+    {
+      "key": "panamera", "brand": "Porsche", "model": "Panamera 4S", "year": 2017,
+      "price": 59900, "mileage": 64000, "fuelType": "PETROL", "transmission": "PDK, 8 stepeni", "enginePowerHp": 440, "color": "Siva metalik",
+      "description": "Panamera 4S druge generacije, oznake 971.1, prenosi sportski karakter marke Porsche u prostran gran turismo sa četvora vrata. V6 biturbo motor od 2,9 litara razvija 440 KS i 550 Nm, uparen sa osmostepenim PDK menjačem i pogonom na sva četiri točka. Niska linija krova, dugačka silueta i kabina sa četiri pojedinačna sedišta stvaraju sklad između dinamične vožnje i udobnih putovanja. Izabrana je benzinska 4S liftback konfiguracija prve serije druge generacije.",
+      "sources": ["https://www.porsche.com/france/aboutporsche/pressreleases/pof/?id=2016-06-29&pool=france", "https://files.porsche.com/filestore/download/usa/none/panamera-pos-brochure/default/b5f9ba0c-7c34-11e7-99c7-0019999cd470/Panamera-POS-Brochure.pdf"],
+      "photoGap": "Za sada su potvrđena dva kvalitetna spoljašnja kadra iste Panamere 4S 971.1; enterijer još nije odabran."
+    }
+  ],
+  "existing": [
+    {"key": "toyota", "match": {"brand": "Toyota", "model": "Corolla", "year": 2023}, "fill": {"model": "Corolla 1.8 Hybrid", "transmission": "e-CVT", "enginePowerHp": 140, "color": "Siva metalik", "description": "Corolla 1.8 Hybrid modelske 2023. godine kombinuje benzinski motor i električni pogon sa ukupnom sistemskom snagom od 140 KS. Kontinuirano promenljivi e-CVT i prednji pogon prilagođeni su tihoj gradskoj vožnji i udobnim svakodnevnim putovanjima. Kompaktna karoserija i pregledna kabina donose praktičnost uz savremen izgled. Postojeća cena, godište i kilometraža ovog demonstracionog primerka su sačuvani."}, "sources": ["https://media.toyota.co.uk/wp-content/uploads/sites/5/pdf/221213-Toyota-All-Pages.pdf"]},
+    {"key": "audi-a4", "match": {"brand": "Audi", "model": "A4", "year": 2020}, "fill": {"model": "A4 40 TDI quattro S tronic", "transmission": "S tronic, 7 stepeni", "enginePowerHp": 190, "color": "Crna metalik", "description": "Audi A4 Limousine generacije B9 posle osveženja donosi odmeren premium nastup i pregledan digitalni prostor za vozača. Izabrana 40 TDI konfiguracija sa 2,0-litarskim dizel motorom razvija 190 KS i 400 Nm, uz sedmostepeni S tronic i quattro pogon. Elegantne proporcije limuzine i uglađen karakter pogona namenjeni su udobnim putovanjima. Postojeća cena, godište i kilometraža ovog demonstracionog primerka su sačuvani."}, "sources": ["https://www.audi.com/en/the-audi-a4-major-upgrade-for-the-bestseller-2019-11884/the-facts-11887"]},
+    {"key": "bmw-320d", "match": {"brand": "BMW", "model": "320d", "year": 2021}, "fill": {}, "note": "Postojeći SOLD zapis: API zabranjuje izmenu specifikacija. Dodaju se samo fotografije kroz OWNER photo API. Status, cena i svi podaci ostaju očuvani."}
+  ]
+}

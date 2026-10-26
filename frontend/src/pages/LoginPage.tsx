@@ -110,7 +110,7 @@ export default function LoginPage() {
         </form>
 
         <p className="auth-switch">Nemaš nalog? <Link className="text-link" to="/registracija">Kreiraj nalog</Link></p>
-        <p className="session-note"><Icon name="shield" size={16} /> Sesija traje do odjave, isteka ili osvežavanja stranice.</p>
+        <p className="session-note"><Icon name="shield" size={16} /> Prijava ostaje aktivna pri osvežavanju stranice, do odjave, isteka sesije ili zatvaranja taba.</p>
       </div>
     </section>
   )

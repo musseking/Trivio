@@ -4,6 +4,8 @@
 .vscode
 *.log
 .env
+.catalog-owner-token
+.local
 .env.*
 **/*.sql.bak
 **/*.sql.gz

@@ -4,6 +4,7 @@ import { getMe, loginAccount, registerAccount, updateMyProfile } from '../api/au
 import { ApiError, subscribeToUnauthorized } from '../api/client'
 import type { LoginRequest, RegisterRequest, UpdateProfileRequest, User } from '../api/types'
 import { uploadProfilePhoto, removeProfilePhoto } from '../api/profile-photo'
+import { clearStoredSession, readStoredSession, saveStoredSession } from './session-storage'
 
 export interface AuthContextValue {
   user: User | null
@@ -25,10 +26,11 @@ interface Session {
   expiresAt: number
 }
 
-/** No persistent session: tokens live only in React memory and disappear on reload. */
+/** Restore a tab-scoped session only after Auth Service confirms the current identity. */
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const [savedSession] = useState(readStoredSession)
   const [session, setSession] = useState<Session | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(savedSession !== null)
   const sessionRef = useRef<Session | null>(null)
   const operationRef = useRef(0)
   const requestRef = useRef<AbortController | null>(null)
@@ -43,11 +45,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearExpiry()
     sessionRef.current = next
     setSession(next)
+    if (next) saveStoredSession(next)
+    else clearStoredSession()
     if (next) {
       expiryRef.current = setTimeout(() => {
         if (sessionRef.current?.accessToken === next.accessToken) {
           sessionRef.current = null
           setSession(null)
+          clearStoredSession()
           expiryRef.current = null
         }
       }, Math.max(0, next.expiresAt - Date.now()))
@@ -90,6 +95,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false)
     }
   }, [])
+
+  useEffect(() => {
+    if (!savedSession) return
+    const persisted = savedSession
+    const { controller, operation } = beginOperation()
+    async function restore() {
+      try {
+        const user = await getMe(persisted.accessToken, controller.signal)
+        if (controller.signal.aborted || operationRef.current !== operation) return
+        if (persisted.expiresAt <= Date.now()) updateSession(null)
+        else updateSession({ ...persisted, user })
+      } catch (error) {
+        if (controller.signal.aborted || operationRef.current !== operation) return
+        if (persisted.expiresAt <= Date.now() || error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+          updateSession(null)
+        }
+        // A temporary network failure leaves the credential available for the next reload.
+        // No cached identity or OWNER rights are exposed without server verification.
+      } finally {
+        finishOperation(operation)
+      }
+    }
+    void restore()
+    return () => controller.abort()
+  }, [savedSession, beginOperation, finishOperation, updateSession])
 
   const login = useCallback(async (data: LoginRequest) => {
     const { controller, operation } = beginOperation()

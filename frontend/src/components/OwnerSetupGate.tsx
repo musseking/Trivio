@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { getOwnerSetupStatus } from '../api/auth'
 import { getErrorMessage, isAbortError } from '../api/client'
-import { Brand } from './Layout'
+import { Brand, SiteFooter } from './Layout'
 import { ThemeToggle } from '../theme/ThemeToggle'
 import { Icon } from './Icon'
 import OwnerSetupPage from '../pages/OwnerSetupPage'
@@ -58,5 +58,6 @@ export function OwnerSetupGate({ children }: { children: ReactNode }) {
             </button>}
           </section>}
     </main>
+    <SiteFooter />
   </div>
 }

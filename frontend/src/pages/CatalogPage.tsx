@@ -37,6 +37,6 @@ export default function CatalogPage() {
       : error ? <AsyncState kind="error" title="Nismo uspeli da učitamo automobile" description={getErrorMessage(error)} onRetry={retry} />
       : filtered.length === 0 ? <AsyncState kind="empty" title={hasFilters ? 'Još nema tog savršenog spoja' : 'Ponuda je trenutno prazna'} description={hasFilters ? 'Promeni kriterijume i pogledaj ostale automobile iz ponude.' : 'Novi automobili će se pojaviti ovde kada budu dodati.'} action={hasFilters ? <button className="button button-secondary" type="button" onClick={() => setParams({})}>Prikaži sve automobile<Icon name="arrow-right" size={17} /></button> : undefined} />
       : <div className="vehicle-grid">{filtered.map((vehicle) => <VehicleCard vehicle={vehicle} key={vehicle.id} />)}</div>}
-    <div className="catalog-footnote"><Icon name="info" size={17} /><span>Dostupnost svakog automobila prikazana je uz njegovu ponudu.</span></div>
+    <div className="catalog-footnote"><Icon name="info" size={17} /><span>Demonstraciona ponuda za studentski projekat. Cene i kilometraže su primeri; fotografije ilustruju modele. Dostupnost je prikazana uz svaki automobil.</span></div>
   </div>;
 }

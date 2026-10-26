@@ -66,12 +66,16 @@ export function Layout() {
     </header>
     {profileOpen && user && <ProfileDialog key={user.id} user={user} onClose={() => setProfileOpen(false)} />}
     <main id="main-content" tabIndex={-1}><Outlet /></main>
-    <footer className="site-footer">
+    <SiteFooter />
+  </div>;
+}
+
+export function SiteFooter() {
+  return <footer className="site-footer">
       <div className="container footer-top">
         <div><Brand light /><p>Za sve puteve koji su pred tobom.</p></div>
         <nav aria-label="Navigacija u podnožju"><Link to="/automobili">Istraži automobile<Icon name="arrow-up-right" size={15} /></Link><Link to="/porudzbine">Moje porudžbine<Icon name="arrow-up-right" size={15} /></Link></nav>
       </div>
-      <div className="container footer-bottom"><span>© {new Date().getFullYear()} Trivio</span><span>Studentski projekat · Prodaja automobila</span><span className="footer-tagline">Tvoje sledeće poglavlje.</span></div>
-    </footer>
-  </div>;
+      <div className="container footer-bottom"><span>© {new Date().getFullYear()} Trivio</span><span>Studentski projekat · Prodaja automobila</span><span className="footer-creator">Kreator projekta: <strong>Vasilije Medić</strong></span></div>
+    </footer>;
 }

@@ -95,7 +95,9 @@ Public registration creates CUSTOMER accounts only.
 
 The frontend obtains the authenticated user's identity from /api/auth/me.
 
-JWT access tokens are kept in application memory.
+JWT access tokens are kept in application memory and in the current tab's `sessionStorage`, together with their original expiry time. Refreshing the page restores the session only after `/api/auth/me` verifies the current account and permissions. User details, roles and passwords are not saved in browser storage.
+
+Logout, token expiry and rejected sessions clear the saved credential. Reloading does not extend the token lifetime. The session ends with the browser tab; blocked browser storage falls back to an in-memory session.
 
 Backend authorization is responsible for enforcing permissions. Frontend role checks only control the user interface.
 
@@ -119,7 +121,7 @@ Run the following commands inside the frontend directory:
     npm run test
     npm run build
 
-The project currently includes 24 automated frontend tests.
+The project currently includes 31 automated frontend tests, including session restoration storage, expiry, logout and unavailable browser storage.
 
 These tests use isolated HTTP responses and do not modify live MySQL databases.
 

@@ -76,6 +76,9 @@ The application uses four independent databases:
 
 Vehicle image files are stored separately in a persistent Docker volume.
 
+The curated demonstration inventory, licensed photo sources, import instructions,
+and preservation checks are documented in [`docs/catalog`](docs/catalog/README.md).
+
 SQL schema initialization scripts and migration history are located in
 [`docs/db/migrations`](docs/db/migrations).
 

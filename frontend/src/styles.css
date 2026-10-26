@@ -84,7 +84,7 @@ main:focus { outline: none; }
 .hero-bottom > span { display: flex; align-items: center; gap: 8px; }
 .hero-bottom > small { font-size: 9px; background: #122e2a75; border: 1px solid #ffffff25; padding: 5px 8px; border-radius: 4px; }
 .hero-corner { position: absolute; right: 28px; top: 29px; font-size: 9px; letter-spacing: 2px; opacity: .75; }
-.home-search { margin: -16px 30px 0; position: relative; z-index: 2; display: grid; grid-template-columns: 1.15fr .75fr 1fr auto; gap: 23px; align-items: center; padding: 27px 28px; background: white; border: 1px solid #e7e7df; border-radius: 10px; box-shadow: 0 12px 30px #1b35240a; }
+.home-search { margin: 20px 30px 0; position: relative; z-index: 2; display: grid; grid-template-columns: 1.15fr .75fr 1fr auto; gap: 23px; align-items: center; padding: 27px 28px; background: white; border: 1px solid #e7e7df; border-radius: 10px; box-shadow: 0 12px 30px #1b35240a; }
 .home-search-intro { display: flex; align-items: center; gap: 12px; }
 .search-symbol { width: 44px; height: 44px; background: #edf1e5; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--green); flex-shrink: 0; }
 .home-search-intro strong { display: block; font-size: 14px; font-weight: 650; margin-bottom: 4px; }
@@ -104,12 +104,23 @@ main:focus { outline: none; }
 .vehicle-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 23px; }
 .vehicle-card { background: white; border: 1px solid #e3e5dd; border-radius: 10px; overflow: hidden; transition: transform .2s, box-shadow .2s; min-width: 0; }
 .vehicle-card:hover { transform: translateY(-4px); box-shadow: 0 16px 30px #2138290b; }
-.vehicle-card-link { display: block; height: 100%; }
+.vehicle-card-link { display: flex; flex-direction: column; height: 100%; }
 .vehicle-card-link:focus-visible { outline-offset: -4px; }
 .vehicle-card-image { position: relative; }
 .vehicle-photo { aspect-ratio: 1.8; width: 100%; background: var(--surface); overflow: hidden; }
 .vehicle-photo img { width: 100%; height: 100%; object-fit: cover; }
-.vehicle-photo-large { aspect-ratio: 1.65; }
+.vehicle-photo-large { aspect-ratio: auto; background: transparent; }
+.vehicle-photo-large img { display: block; width: 100%; height: auto; object-fit: contain; }
+.vehicle-card-content { display: flex; flex-direction: column; flex: 1; }
+.vehicle-card h3 { min-height: 2.6em; }
+.vehicle-card-bottom { margin-top: auto; gap: 12px; }
+.gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid #ffffff70; border-radius: 50%; background: #183e35db; color: white; cursor: pointer; }
+.gallery-previous { left: 12px; }
+.gallery-next { right: 12px; }
+.gallery-arrow:hover { background: #183e35; }
+.gallery-credit { color: var(--muted); font-size: 11px; line-height: 1.7; margin-top: 12px; overflow-wrap: anywhere; }
+.gallery-credit summary { cursor: pointer; }
+.gallery-credit a { text-decoration: underline; text-underline-offset: 2px; }
 .detail-badges { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; }
 .status-withdrawn { background: #eee5da; color: #78542f; }
 .withdrawn-notice { display: flex; align-items: flex-start; gap: 10px; background: #f2ece2; color: #76532f; padding: 16px 20px; border-radius: 8px; font-size: 12px; line-height: 1.8; margin-bottom: 24px; }
@@ -164,6 +175,8 @@ main:focus { outline: none; }
 .footer-top a:hover { color: white; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 15px; font-size: 9px; color: #829b8d; padding-block: 20px; border-top: 1px solid #335044; }
 .footer-tagline { font-style: italic; }
+.footer-creator { font-size: 11px; }
+.footer-creator strong { font-weight: 600; color: #d7e5d8; }
 .page-space { padding-block: 28px 70px; min-height: 62vh; }
 .breadcrumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; color: var(--muted); font-size: 11px; margin-bottom: 38px; }
 .breadcrumbs a:hover { color: var(--green); }
@@ -202,7 +215,14 @@ main:focus { outline: none; }
 .detail-subtitle { font-size: 12px; color: var(--muted); margin-bottom: 0; line-height: 1.7; }
 .detail-subtitle > span { padding-inline: 9px; }
 .detail-grid { display: grid; grid-template-columns: minmax(0, 1fr) 335px; gap: 30px; align-items: start; }
-.detail-image { border: 1px solid var(--line); border-radius: 11px; overflow: hidden; }
+.detail-image { border: 0; border-radius: 0; overflow: hidden; }
+.detail-return { position: fixed; left: max(16px, calc((100vw - 1280px) / 2 - 72px)); top: 50%; z-index: 10; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; background: var(--panel); color: var(--green); box-shadow: 0 4px 16px #00000012; }
+.detail-return:hover { background: var(--panel-soft); }
+.detail-return span { display: none; }
+@media (max-width: 1399px) {
+  .detail-return { position: static; width: fit-content; padding-inline: 13px; gap: 8px; margin-bottom: 22px; border-radius: 8px; box-shadow: none; font-size: 12px; }
+  .detail-return span { display: inline; }
+}
 .vehicle-visual-large { aspect-ratio: 1.65; }
 .vehicle-visual-large .vehicle-visual-label { font-size: 9px; top: 28px; right: 27px; }
 .vehicle-visual-large .vehicle-visual-note { font-size: 11px; bottom: 25px; }
@@ -377,7 +397,7 @@ main:focus { outline: none; }
   .hero-corner { font-size: 7px; right: 20px; top: 22px; }
   .hero-bottom { left: 24px; right: 20px; bottom: 34px; flex-wrap: wrap; font-size: 9px; gap: 10px; }
   .hero-bottom > small { font-size: 7px; }
-  .home-search { grid-template-columns: 1fr 1fr; margin: -17px 11px 0; gap: 18px 14px; padding: 22px 18px; border-radius: 8px; }
+  .home-search { grid-template-columns: 1fr 1fr; margin: 16px 11px 0; gap: 18px 14px; padding: 22px 18px; border-radius: 8px; }
   .home-search-field { padding-left: 0; border-left: 0; }
   .home-search-field label { font-size: 9px; }
   .home-search-field input, .home-search-field select { font-size: 11px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
